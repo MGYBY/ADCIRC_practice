@@ -1,4 +1,7 @@
 clearvars; clc; close all
+set(0,'defaultAxesFontSize',16);
+set(0,'DefaultFigurePaperPositionMode','auto')
+set(0,'defaultAxesFontName','CMU Serif')
 
 % refined grid
 % max_el = 2.5e3;
@@ -9,20 +12,20 @@ clearvars; clc; close all
 % grade_val = 0.25;
 
 % regular grid
-% max_el = 6e3;
-% min_el = 0.2e3;
-% max_el_ns = 0.5e3;
-% slp = 8;
-% R_val = 3.0;
-% grade_val = 0.25;
+max_el = 8e3;
+min_el = 0.3e3;
+max_el_ns = 0.6e3;
+slp = 10;
+R_val = 3.0;
+grade_val = 0.2;
 
 % coarse grid
-max_el = 25e3;
-min_el = 0.79e3;
-max_el_ns = 0.8e3;
-slp = 8;
-R_val = 3.0;
-grade_val = 0.35;
+% max_el = 25e3;
+% min_el = 0.79e3;
+% max_el_ns = 0.8e3;
+% slp = 8;
+% R_val = 3.0;
+% grade_val = 0.35;
 
 dt_val = 2.0;
 
@@ -75,8 +78,15 @@ plot(m,'type','bd');
 
 plot(m,'type','b');   % plot bathy on native projection
 
+%% Export plots
+figs = get(0,'children');
+for f = 1:numel(figs)
+    fname = sprintf('plot%i', figs(f).Number);
+    print(figs(f).Number,fname,'-djpeg','-r500');
+end
+
 %% Save mesh files
 % Save as a msh class
 % save(sprintf('%s_msh.mat',PREFIX),'m');
 % % Write an ADCIRC fort.14 compliant file to disk.
-write(m, 'lo_mesh_2')
+write(m, 'lo_mesh')
