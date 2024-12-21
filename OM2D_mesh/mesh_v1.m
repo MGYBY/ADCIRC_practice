@@ -1,4 +1,4 @@
-clc; clear;
+clearvars; clc; close all
 
 % refined grid
 % max_el = 2.5e3;
@@ -9,20 +9,20 @@ clc; clear;
 % grade_val = 0.25;
 
 % regular grid
-max_el = 5e3;
-min_el = 0.3e3;
-max_el_ns = 0.6e3;
-slp = 9;
-R_val = 3.0;
-grade_val = 0.275;
-
-% coarse grid
-% max_el = 20e3;
-% min_el = 0.9e3;
-% max_el_ns = 1e3;
+% max_el = 6e3;
+% min_el = 0.2e3;
+% max_el_ns = 0.5e3;
 % slp = 8;
 % R_val = 3.0;
-% grade_val = 0.35;
+% grade_val = 0.25;
+
+% coarse grid
+max_el = 25e3;
+min_el = 0.79e3;
+max_el_ns = 0.8e3;
+slp = 8;
+R_val = 3.0;
+grade_val = 0.35;
 
 dt_val = 2.0;
 
@@ -44,11 +44,14 @@ m = mshopts.grd;
 plot(m,'type','tri');
 
 m = interp(m,gdat, 'type', 'depth' ,'mindepth',0.2); % interpolate bathy to the mesh with minimum depth of 1 m
+CFL = CalcCFL(m,dt_val);
+max(CFL)
+min(CFL)
 m = bound_courant_number(m,dt_val);
 
 %% Make the nodestring boundary conditions
-m = make_bc(m,'auto',gdat,'distance');
-
+% m = make_bc(m,'auto',gdat,'distance');
+m = make_bc(m,'auto',gdat);
 
 %% Identify vstart and vend of each riverine boundary
 % use the comannd-line method to identify the vstart and vend for each...
@@ -58,8 +61,8 @@ m = make_bc(m,'auto',gdat,'distance');
 % river_points2 = [-76.3775332218752	44.1496325877826; -76.3410690849980	44.1289194788211]; % coordinates of river edge
 % bc_k1 = ourKNNsearch(m.p',river_points1',1);
 % bc_k2 = ourKNNsearch(m.p',river_points2',1);
-% m = make_bc(m,'outer',0,bc_k1(1),bc_k1(2),1,44);
-% m = make_bc(m,'outer',1,bc_k2(1),bc_k2(2),1,44);
+% m = make_bc(m,'outer',1,bc_k1(1),bc_k1(2),1,4);
+% m = make_bc(m,'outer',1,bc_k2(1),bc_k2(2),1,4);
 
 % use the data cursor method to identify the vstart and vend for each...
 % riverine boundary manually (GUI).
@@ -70,8 +73,10 @@ m = renum(m);
 
 plot(m,'type','bd');
 
+plot(m,'type','b');   % plot bathy on native projection
+
 %% Save mesh files
 % Save as a msh class
 % save(sprintf('%s_msh.mat',PREFIX),'m');
 % % Write an ADCIRC fort.14 compliant file to disk.
-write(m, 'lo_mesh')
+write(m, 'lo_mesh_2')
