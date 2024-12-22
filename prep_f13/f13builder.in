@@ -1,0 +1,6 @@
+fort.13                                           !filfort13 - output fort.13 nodal attribute file
+fort.14                                           !filfort14 - fort.14 mesh file
+../../CCAPmosaicclipV1.txt                        !fillc - land cover file
+1                                                 !nattr - number of nodal attributes                                            !defmnasf - mnasf default value
+primitive_weighting_in_continuity_equation        !curnamattr - nodal attribute name
+
