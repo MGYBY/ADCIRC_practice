@@ -89,6 +89,7 @@ m = make_bc(m,'auto',gdat);
 m = renum(m);
 
 m = Calc_tau0(m);
+m = Make_f15( m, '01-Jan-2018 03:00', '01-Feb-2018 22:00', 1);
 
 plot(m,'type','bd','LineWidth',0.25);
 
