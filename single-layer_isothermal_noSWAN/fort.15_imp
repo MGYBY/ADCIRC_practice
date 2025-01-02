@@ -25,7 +25,7 @@ ADCIRC V56.02                ! 20 CHARACTER ALPANUMERIC RUN IDENTIFICATION
  0.0                       ! REFTIM - REFERENCE TIME (IN DAYS)
  2024 12 22 00 1 0.9 1 21600 40 70  ! WTIMINC line YYYY,MM,DD,HH24,StormNumber,BLAdj,Geofactor,WTIMINC for gridded met,min and max rmws for blending
  3.0                       ! RNDAY - TOTAL LENGTH OF SIMULATION IN DAYS  (64 would be full run)
- 0.0                       ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
+ 1.0                       ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
  0.35 0.30 0.35            ! TIME WEIGHTING FACTORS FOR THE GWCE EQUATION
  0.2                       ! H0 - MINIMUM CUTOFF DEPTH
  -77.5922872991131 43.7223336071123                ! SLAM0,SFEA0 - CENTER OF CPP PROJECTION IN DEGREES LONG/LAT
