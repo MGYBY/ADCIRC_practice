@@ -18,14 +18,14 @@ set(gca, 'OuterPosition', [0,0,1,1])
 max_el = 5.0e3;
 min_el = 0.10e3;
 max_el_ns = 0.20e3;
-slp = 10;
+slp = 9;
 R_val = 3.0;
-grade_val = 0.19;
+grade_val = 0.2;
 
 % moderately coarse grid
 % max_el = 16e3;
-% min_el = 0.75e3;
-% max_el_ns = 0.8e3;
+% min_el = 0.70e3;
+% max_el_ns = 0.7e3;
 % slp = 9;
 % R_val = 3.0;
 % grade_val = 0.20;
@@ -38,7 +38,7 @@ grade_val = 0.19;
 % R_val = 3.0;
 % grade_val = 0.35;
 
-dt_val = 2.0;
+dt_val = 1.0;
 
 coastline = './GSHHS_l_L1_mod';
 nc_file = './dem_nc.nc';
@@ -50,7 +50,7 @@ gdat.inpoly_flip = mod(1,gdat.inpoly_flip) ;
 
 fh1 = edgefx('geodata', gdat, 'fs', R_val, 'max_el', max_el, 'dt', dt_val, 'g', grade_val, 'slp',slp);
 
-mshopts = meshgen('ef',fh1,'bou',gdat,'plot_on',1,'nscreen',5,'proj','trans', 'itmax', 125);
+mshopts = meshgen('ef',fh1,'bou',gdat,'plot_on',1,'nscreen',5,'proj','trans', 'itmax', 86);
 mshopts = mshopts.build;
 m = mshopts.grd;
 
@@ -60,7 +60,7 @@ m = m.clean;
 plot(m,'type','tri','LineWidth',0.25);
 
 m = interp(m,gdat, 'type', 'depth' ,'mindepth',0.2); % interpolate bathy to the mesh with minimum depth of 1 m
-m = lim_bathy_slope(m,0.1,0);
+m = lim_bathy_slope(m,0.2,0);
 CFL = CalcCFL(m,dt_val);
 max(CFL)
 min(CFL)
@@ -89,7 +89,10 @@ m = make_bc(m,'auto',gdat);
 m = renum(m);
 
 m = Calc_tau0(m);
-m = Make_f15( m, '01-Jan-2018 03:00', '01-Feb-2018 22:00', 1);
+% m = Calc_f13(m, 'average_horizontal_eddy_viscosity_in_sea_water_wrt_depth');
+
+% m = Make_f15(obj=m, ts = '01-Jan-2018 03:00', te = '01-Feb-2018 22:00', dt=2);
+m = Make_f15( m, '01-Jan-2018 03:00', '01-Feb-2018 22:00', 1) ; 
 
 plot(m,'type','bd','LineWidth',0.25);
 
@@ -107,3 +110,11 @@ end
 % save(sprintf('%s_msh.mat',PREFIX),'m');
 % % Write an ADCIRC fort.14 compliant file to disk.
 write(m, 'lo_mesh_reg')
+% writefort15(m, 'lo15')
+
+%% mean projection coordinate of CPP
+xy = m.p;
+x = xy(:,1);
+y = xy(:,2);
+mean_x = mean(x);
+mean_y = mean(y);
