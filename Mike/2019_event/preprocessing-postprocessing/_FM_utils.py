@@ -96,6 +96,7 @@ def _plot_map(
     figsize: tuple[float, float] | None = None,
     ax: Axes | None = None,
     add_colorbar: bool = True,
+    save_str: str | None = None,
 ) -> Axes:
     """Plot unstructured data and/or mesh, mesh outline.
 
@@ -202,6 +203,14 @@ def _plot_map(
         __plot_mesh_only(ax, nc, element_table)
         return ax
 
+    # # Show the major grid and style it slightly.
+    # ax.grid(which='major', color='#D3D3D3', linewidth=0.6, linestyle = '--')
+    # # Show the minor grid as well. Style it in very light gray as a thin,
+    # # dotted line.
+    # ax.grid(which='minor', color='#EEEEEE', linestyle=':', linewidth=0.3)
+    # # Make the minor ticks and gridlines show.
+    # ax.minorticks_on()
+
     # At this point we are sure that we are plotting some data, at least bathymetry
     if z is None:
         z = ec[:, 2]
@@ -282,6 +291,10 @@ def _plot_map(
 
     if title:
         ax.set_title(title)
+
+    if save_str:
+        # fig.savefig(save_str, dpi=800)
+        plt.savefig(save_str, dpi=800)
 
     return ax
 
@@ -572,6 +585,7 @@ def __add_colorbar(
         extend=cbar_extend,
         orientation="horizontal",
         shrink = 1,
+        fraction=0.046,
     )
 
 
