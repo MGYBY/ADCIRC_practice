@@ -867,6 +867,8 @@ def _plot_vertical_profile(
     cmax: float | None = None,
     label: str = "",
     add_colorbar: bool = True,
+    figsize: tuple[float, float] | None = None,
+    save_str: str | None = None,
     **kwargs: Any,
 ) -> Axes:
     """Plot unstructured vertical profile.
@@ -924,9 +926,9 @@ def _plot_vertical_profile(
     if "ax" in kwargs:
         ax = kwargs["ax"]
     else:
-        figsize = None
-        if "figsize" in kwargs:
-            figsize = kwargs["figsize"]
+        # figsize = None
+        # if "figsize" in kwargs:
+        #     figsize = kwargs["figsize"]
         _, ax = plt.subplots(figsize=figsize)
 
     sz = np.c_[s_coordinate, z_coordinate]
@@ -961,6 +963,10 @@ def _plot_vertical_profile(
 
     if "title" in kwargs:
         ax.set_title(kwargs["title"])
+
+    if save_str:
+        # fig.savefig(save_str, dpi=800)
+        plt.savefig(save_str, dpi=800)
 
     return ax
 
