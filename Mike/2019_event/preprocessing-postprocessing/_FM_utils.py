@@ -97,6 +97,7 @@ def _plot_map(
     ax: Axes | None = None,
     add_colorbar: bool = True,
     save_str: str | None = None,
+    skip_level: int = 1,
 ) -> Axes:
     """Plot unstructured data and/or mesh, mesh outline.
 
@@ -285,7 +286,7 @@ def _plot_map(
         __add_outline(ax, boundary_polylines)
 
     if add_colorbar:
-        __add_colorbar(ax, cmap_ScMappable, fig_obj, label, levels, cbar_extend)
+        __add_colorbar(ax, cmap_ScMappable, fig_obj, label, levels, cbar_extend, skip_level)
 
     __set_plot_limits(ax, nc)
 
@@ -545,6 +546,7 @@ def __add_colorbar(
     label: str,
     levels: np.ndarray,
     cbar_extend: str,
+    skip_level:int,
 ) -> None:
     """add colorbar to axes.
 
@@ -578,7 +580,7 @@ def __add_colorbar(
         cmap_sm,  # type: ignore
         label=label,
         cax=cax,
-        ticks=levels[::2],
+        ticks=levels[::skip_level],
         format=tkr.FormatStrFormatter('%.2f'),
         # ticks = 8,
         boundaries=levels,
