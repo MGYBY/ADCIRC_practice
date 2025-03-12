@@ -98,6 +98,7 @@ def _plot_map(
     add_colorbar: bool = True,
     save_str: str | None = None,
     skip_level: int = 1,
+    cbar_extent_dir: int = 1,
 ) -> Axes:
     """Plot unstructured data and/or mesh, mesh outline.
 
@@ -224,7 +225,10 @@ def _plot_map(
     vmin, vmax, cmap, cmap_norm, cmap_ScMappable, levels = __set_colormap_levels(
         cmap, vmin, vmax, levels, z
     )
-    cbar_extend = __cbar_extend(z, vmin, vmax)
+    if cbar_extent_dir == 1:
+        cbar_extend = __cbar_extend(z, vmin, vmax)
+    elif cbar_extent_dir == 2:
+        cbar_extend = __cbar_extend_max(z, vmin, vmax)
 
     if plot_type == "patch":
         fig_obj: Any = __plot_patch(
@@ -856,6 +860,25 @@ def __cbar_extend(
         extend = "max"
     else:
         extend = "neither"
+    # extend = "max"
+    return extend
+
+def __cbar_extend_max(
+    calc_data: np.ndarray | None, vmin: float | None, vmax: float | None
+) -> str:
+    if calc_data is None:
+        return "neither"
+    extend_min = calc_data.min() < vmin if vmin is not None else False
+    extend_max = calc_data.max() > vmax if vmax is not None else False
+    # if extend_min and extend_max:
+    #     extend = "both"
+    # elif extend_min:
+    #     extend = "min"
+    # elif extend_max:
+    #     extend = "max"
+    # else:
+    #     extend = "neither"
+    extend = "max"
     return extend
 
 
